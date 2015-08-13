@@ -13,11 +13,34 @@ def callApi(uri)
   end
 end
 
-# Read and hash JSON
-json_hash = callApi(ARGV[0])
+def getJams(uri)
+  # Read and hash JSON
+  json_hash = callApi(uri)
 
-json_hash["jams"].each do |jam|
+  json_hash["jams"].each do |jam|
 
-  puts '"' + jam["title"] + '", by ' + jam["artist"]
+    puts "<div class='jam'>"
+    puts "<p class='title'>\"<a href='" + jam["viaUrl"] + "'>" + jam["title"] + "</a>\"</p>"
+    puts "<p class='artist'>by " + jam["artist"] + "</p>"
 
+    if jam["likesCount"] > 0
+      puts "<p class='likes'>" + jam["likesCount"].to_s + " &hearts; " + "</p>"
+    end
+
+    puts "</div>"
+
+  end
+
+  if json_hash["list"]["hasMore"]
+    getJams(json_hash["list"]["next"])
+  end
 end
+
+userName = ARGV[0].split("/")[4]
+
+puts "<!doctype html><html><head>"
+puts "</head><body>"
+puts "<h1>Jams by " + userName + "</h1>"
+getJams(ARGV[0])
+
+puts "</body></html>"
