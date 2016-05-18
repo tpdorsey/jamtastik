@@ -30,42 +30,56 @@ def getJams(uri)
   end
 end
 
-jammer = ARGV[0]
+archive_mode = false
+jammer = ""
+
+if ARGV[0] == "-archive" || ARGV[0] == "-a"
+  archive_mode = true
+  jammer = ARGV[1]
+else
+  jammer = ARGV[0]
+end
+
 api_uri = "http://api.thisismyjam.com/1/" + jammer + "/jams.json"
 
-# puts "<!doctype html><html><head>"
-# puts "</head><body>"
-# puts "<h1>Jams by " + jammer + "</h1>"
+puts "<!doctype html><html><head>"
+puts "<title>" + jammer + "'s ThisIsMyJam Jams</title>"
+puts "</head><body>"
+puts "<h1 class='title'>Jams by " + jammer + "</h1>"
 
 getJams(api_uri)
 
-# $jams.reverse!
+puts "<p class='subtitle'>" + $jams.length.to_s + " jams since " + $jams.last["creationDate"] + "</p>"
 
 $jams.each do |jam|
 
-  # puts jam
+  # puts jam["title"]
+  # puts "by " + jam["artist"]
 
-  puts ""
-  puts jam["title"]
-  puts "by " + jam["artist"]
-
-  jam["likesCount"].times {print "♥︎ "}
+  # jam["likesCount"].times {print "♥︎ "}
   # if jam["likesCount"] > 0
   #   {puts "&hearts; "}
   # end
 
   puts " "
 
-#   puts "<div class='jam'>"
-#   puts "<p class='title'><a href='" + jam["viaUrl"] + "'>" + jam["title"] + "</a></p>"
-#   puts "<p class='artist'>by " + jam["artist"] + "</p>"
+  puts "<div class='jam'>"
+  puts "<img src='" + jam["jamvatarMedium"] + "'>"
+  puts "<p class='title'><a href='" + jam["viaUrl"] + "'>" + jam["title"] + "</a></p>"
+  puts "<p class='artist'>by " + jam["artist"] + "</p>"
+  puts "<p class='source'>via " + jam["via"] + "</p>"
 
-#   if jam["likesCount"] > 0
-#     puts "<p class='likes'>" + jam["likesCount"].to_s + " &hearts; " + "</p>"
-#   end
+  print "<p class='likes'>&#9835;: "
+  print jam["playCount"].to_s
+  print "  &hearts;: "
+  # heavy heart: &#10084;
+  print jam["likesCount"].to_s
+  print "  &#9998;: "
+  print jam["commentsCount"].to_s
+  puts "</p>"
 
-#   puts "</div>"
+  puts "</div>"
 
 end
 
-# puts "</body></html>"
+puts "</body></html>"
