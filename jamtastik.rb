@@ -21,17 +21,7 @@ def getJams(uri)
 
   json_hash["jams"].each do |jam|
 
-    $jams << [jam["title"],jam["artist"],jam["likesCount"]]
-
-    # puts "<div class='jam'>"
-    # puts "<p class='title'>\"<a href='" + jam["viaUrl"] + "'>" + jam["title"] + "</a>\"</p>"
-    # puts "<p class='artist'>by " + jam["artist"] + "</p>"
-
-    # if jam["likesCount"] > 0
-    #   puts "<p class='likes'>" + jam["likesCount"].to_s + " &hearts; " + "</p>"
-    # end
-
-    # puts "</div>"
+    $jams << jam
 
   end
 
@@ -40,17 +30,42 @@ def getJams(uri)
   end
 end
 
-userName = ARGV[0].split("/")[4]
+jammer = ARGV[0]
+api_uri = "http://api.thisismyjam.com/1/" + jammer + "/jams.json"
 
 # puts "<!doctype html><html><head>"
 # puts "</head><body>"
-# puts "<h1>Jams by " + userName + "</h1>"
-getJams(ARGV[0])
+# puts "<h1>Jams by " + jammer + "</h1>"
 
-# puts "</body></html>"
+getJams(api_uri)
 
-$jams.reverse!
+# $jams.reverse!
 
 $jams.each do |jam|
-  puts ('*' * jam[2])
+
+  # puts jam
+
+  puts ""
+  puts jam["title"]
+  puts "by " + jam["artist"]
+
+  jam["likesCount"].times {print "♥︎ "}
+  # if jam["likesCount"] > 0
+  #   {puts "&hearts; "}
+  # end
+
+  puts " "
+
+#   puts "<div class='jam'>"
+#   puts "<p class='title'><a href='" + jam["viaUrl"] + "'>" + jam["title"] + "</a></p>"
+#   puts "<p class='artist'>by " + jam["artist"] + "</p>"
+
+#   if jam["likesCount"] > 0
+#     puts "<p class='likes'>" + jam["likesCount"].to_s + " &hearts; " + "</p>"
+#   end
+
+#   puts "</div>"
+
 end
+
+# puts "</body></html>"
